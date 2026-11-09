@@ -10,7 +10,6 @@ from exceptions import TokenExpiredError, S3ConnectionError, S3FileUploadError
 from schemas.profiles import ProfileResponseSchema, ProfileCreateSchema
 from security.interfaces import JWTAuthManagerInterface
 from storages import S3StorageInterface
-from validation import validate_image
 
 router = APIRouter()
 
@@ -67,10 +66,6 @@ async def create_profile(
     if profile is not None:
         raise HTTPException(status_code=400, detail="User already has a profile.")
 
-    try:
-        validate_image(profile_data.avatar)
-    except ValueError as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
     file_data = await profile_data.avatar.read()
 
     file_name = f"avatars/{user_id}_avatar.jpg"
