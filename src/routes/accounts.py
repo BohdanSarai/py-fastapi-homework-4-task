@@ -129,7 +129,10 @@ async def register_user(
             detail="An error occurred during user creation."
         ) from e
     else:
-        activation_link = f"http://127.0.0.1/api/v1/accounts/activate/?email={user_data.email}&token={activation_token.token}"
+        activation_link = (
+            f"http://127.0.0.1/api/v1/accounts/activate/"
+            f"?email={user_data.email}&token={activation_token.token}"
+        )
         background_task.add_task(
             email_sender.send_activation_email,
             str(user_data.email),
